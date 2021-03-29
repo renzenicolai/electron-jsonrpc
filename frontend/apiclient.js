@@ -22,7 +22,6 @@ class ApiClient {
         window.electron.receive('error', this._handleError.bind(this));
         window.electron.receive('close', this._handleClose.bind(this));
         window.electron.receive('response', this._handleResponse.bind(this));
-        onOpen();
     }
 
     connect() {
@@ -30,6 +29,9 @@ class ApiClient {
         clearTimeout(this.pingTimeout);
         clearTimeout(this.pingRequestTimeout);
         this.pingRequestTimeout = setTimeout(this._ping.bind(this), 1);
+        if (typeof this.onOpen === "function") {
+            this.onOpen();
+        }
     }
 
     _ping() {
